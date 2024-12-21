@@ -1,5 +1,5 @@
 const link =
-  'http://api.weatherapi.com/v1/current.json?key=d434f3b38044466b8ec52826240806&q=London&aqi=no';
+  'https://api.weatherapi.com/v1/current.json?key=d434f3b38044466b8ec52826240806&q=London&aqi=no';
 
 const cityInfo = document.querySelector('.city-info');
 const textInput = document.getElementById('text-input');
