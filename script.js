@@ -1,10 +1,10 @@
-const link =
+const BASE_URL =
   'https://api.weatherapi.com/v1/current.json?key=d434f3b38044466b8ec52826240806&q=London&aqi=no';
 
 const cityInfo = document.querySelector('.city-info');
 const textInput = document.getElementById('text-input');
 
-const form = document.getElementById('form');
+const submitBtn = document.getElementById('submit-button');
 let store = {
   city: 'London',
   tempC: 0,
@@ -18,7 +18,7 @@ let store = {
 };
 
 async function fetchData() {
-  const result = await fetch(`${link}&query=${store.city}`);
+  const result = await fetch(`${BASE_URL}&query=${store.city}`);
   const data = await result.json();
 
   try {
@@ -56,8 +56,6 @@ async function fetchData() {
   } catch (e) {
     console.log(e);
   }
-
-  renderComponent();
 }
 
 function renderProperty(properties) {
@@ -71,11 +69,9 @@ function renderProperty(properties) {
     .join('');
 }
 
-function markup() {
-  const { tempC, properties, city, text, isDay } = store;
-
+function renderComponent({ city, tempC, isDay, text, properties }) {
   const containerClass = isDay === 1 ? 'is-day' : '';
-  return `<div class='container ${containerClass}'>
+  cityInfo.innerHTML = `<div class='container ${containerClass}'>
          <div class='top'>
             <div class = 'city-subtitle'>Weather Today in </div>
             <div class = 'city-title' id='city'>
@@ -89,16 +85,15 @@ function markup() {
         </div>
         `;
 }
-function renderComponent() {
-  cityInfo.innerHTML = markup();
-}
+
 function handleSubmit(e) {
+  fetchData();
   e.preventDefault();
   const value = store.city;
   if (!store.city) return null;
-
   localStorage.setItem('query', value);
-  fetchData();
+  textInput.value = '';
+  renderComponent(store);
 }
 function handleInput(e) {
   store = {
@@ -108,6 +103,6 @@ function handleInput(e) {
 }
 
 textInput.addEventListener('input', handleInput);
-form.addEventListener('click', handleSubmit);
+submitBtn.addEventListener('click', handleSubmit);
 
 fetchData();
